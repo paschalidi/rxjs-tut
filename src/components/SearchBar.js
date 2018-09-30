@@ -70,11 +70,11 @@ class SearchBar extends React.Component {
                   <Header as="h2">{data.login}</Header>
                   <Header as="h4">
                     profile: &nbsp;
-                    <a href={data.url} target="_blank">
+                    <a href={data.url} target="_blank" rel="noopener noreferrer">
                       {data.url}
                     </a>
                   </Header>
-                  <a href={data.url} target="_blank">
+                  <a href={data.url} target="_blank" rel="noopener noreferrer">
                     <Image fluid centered src={data.avatar_url} />
                   </a>
                 </Segment>
