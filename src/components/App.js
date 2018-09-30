@@ -1,9 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
+import SearchBar from "./SearchBar";
 
-class App extends Component {
-  render() {
-    return <div>this is the app</div>;
-  }
-}
+const App = () => (
+    <SearchBar />
+);
 
 export default App;
