@@ -1,3 +1,3 @@
 # rxjs-tut
 
-Describe rxjs-tut here.
+a simple search bar into github's API using rxjs and rx-connect.
