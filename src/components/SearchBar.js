@@ -4,17 +4,17 @@ import { rxConnect, ofActions } from "rx-connect";
 import {
   Input,
   Grid,
-  Button,
   Header,
   Segment,
   Image,
   Message
 } from "semantic-ui-react";
+import PT from "prop-types";
 
 const API = "https://api.github.com/users/";
 const errors = {
-  0: "The Id you are looking for is not existent. We apologise.",
-  1: "Please provide numbers"
+  0: "The user you are looking for is not existent.",
+  1: "You exceeded the limit of possible searches. Ask github why."
 };
 
 @rxConnect(() => {
@@ -29,7 +29,13 @@ const errors = {
         return Rx.Observable.ajax
           .getJSON(`${API}${text}`)
           .switchMap(res => Rx.Observable.of({ data: res, error: {} }))
-          .catch(() => Rx.Observable.of({ error: { message: errors[0] } }));
+          .catch(error => {
+            let message;
+
+            if (error.status === 403) message = errors["1"];
+            else message = errors["0"];
+            Rx.Observable.of({ error: { message } });
+          });
 
       return Rx.Observable.of({ data: {} });
     })
@@ -63,12 +69,14 @@ class SearchBar extends React.Component {
                 <Segment>
                   <Header as="h2">{data.login}</Header>
                   <Header as="h4">
-                    link:{" "}
+                    profile: &nbsp;
                     <a href={data.url} target="_blank">
                       {data.url}
                     </a>
                   </Header>
-                  <Image fluid centered src={data.avatar_url} />
+                  <a href={data.url} target="_blank">
+                    <Image fluid centered src={data.avatar_url} />
+                  </a>
                 </Segment>
               </Grid.Column>
             </Grid.Row>
@@ -77,5 +85,11 @@ class SearchBar extends React.Component {
     );
   }
 }
+
+SearchBar.PT = {
+  type: PT.func,
+  error: PT.shape({}),
+  data: PT.shape({})
+};
 
 export default SearchBar;
